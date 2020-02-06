@@ -23,7 +23,6 @@ class SecretPartyBot {
         JDABuilder bot = new JDABuilder(AccountType.BOT);
         bot.setToken(apiToken);
         bot.addEventListeners(new BotEventListener()).build();
-        //bot.buildAsync(); // LoginException
 
         debugLogger.log(Level.INFO, "SecretPartyBot online");
     }
