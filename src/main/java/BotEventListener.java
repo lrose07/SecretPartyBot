@@ -1,3 +1,4 @@
+import net.dv8tion.jda.api.entities.Category;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildChannel;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -6,6 +7,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.internal.entities.GuildImpl;
 import net.dv8tion.jda.internal.entities.TextChannelImpl;
 
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -43,10 +45,21 @@ public class BotEventListener extends ListenerAdapter {
 
     private void startAParty(Guild guild, MessageReceivedEvent event, String[] partyDetails) {
         if (partyDetails.length >= 2) {
+            managePrivateCategory(guild);
             event.getChannel().sendMessage("Let's have a party!").queue();
             guild.createTextChannel(partyDetails[1]).complete();
+            TextChannel tc = guild.getTextChannelsByName(partyDetails[1], false).get(0);
+            tc.sendMessage("Welcome!").queue();
         } else {
             event.getChannel().sendMessage("You didn't tell me where the party's at!").queue();
+        }
+    }
+
+    private void managePrivateCategory(Guild guild) {
+        String privateCategoryName = "private";
+        List<Category> currentCategories = guild.getCategoriesByName(privateCategoryName, true);
+        if (currentCategories.isEmpty()) {
+            guild.createCategory(privateCategoryName).complete();
         }
     }
 }

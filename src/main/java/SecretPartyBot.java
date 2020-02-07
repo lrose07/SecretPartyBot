@@ -25,5 +25,12 @@ class SecretPartyBot {
         bot.addEventListeners(new BotEventListener()).build();
 
         debugLogger.log(Level.INFO, "SecretPartyBot online");
+
+        guildSetUp();
+    }
+
+    private void guildSetUp() {
+        // does Category.private exist?
+
     }
 }
