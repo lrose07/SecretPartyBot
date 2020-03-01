@@ -1,5 +1,5 @@
 class MemberNotFoundException extends Exception {
-    private String notFoundName;
+    private final String notFoundName;
 
     MemberNotFoundException(String userName) {
         notFoundName = userName;
