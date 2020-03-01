@@ -1,8 +1,11 @@
+import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.requests.restaction.ChannelAction;
 
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -44,11 +47,14 @@ public class BotEventListener extends ListenerAdapter {
             String channelName = partyDetails[1];
             try {
                 ArrayList<Member> privateChannelMembersList = getPrivateChannelUsers(guild, event.getAuthor(), partyDetails);
-                addMembersToChannel(privateChannelMembersList);
                 event.getChannel().sendMessage("Let's have a party!").queue();
-                guild.createTextChannel(channelName).complete();
-                TextChannel tc = guild.getTextChannelsByName(channelName, false).get(0);
-                tc.sendMessage("Welcome!").queue();
+                ChannelAction ca = guild.createTextChannel(channelName);
+                addMembersToChannel(guild, ca, privateChannelMembersList);
+
+//                List<TextChannel> tc = guild.getTextChannels();
+//                System.out.println(tc.toString());
+//                TextChannel tc = guild.getTextChannelsByName(channelName, false).get(0);
+//                tc.sendMessage("Welcome!").queue();
             } catch (MemberNotFoundException e) {
                 event.getChannel().sendMessage("Hmm, " + e.getNotFoundName() + " can't be found!").queue();
             }
@@ -78,8 +84,12 @@ public class BotEventListener extends ListenerAdapter {
         return parseUserNames(guild, nameCommands);
     }
 
-    private void addMembersToChannel(ArrayList<Member> members) {
-        // do stuff
+    private void addMembersToChannel(Guild g, ChannelAction tca, ArrayList<Member> members) {
+        tca.addPermissionOverride(g.getPublicRole(), null, EnumSet.of(Permission.VIEW_CHANNEL));
+        for (Member m : members) {
+            tca.addPermissionOverride(m, EnumSet.of(Permission.VIEW_CHANNEL), null);
+        }
+        tca.queue();
     }
 
     private void managePrivateCategory(Guild guild) {

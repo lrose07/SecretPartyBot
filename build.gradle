@@ -10,10 +10,12 @@ sourceCompatibility = 1.8
 repositories {
     mavenCentral()
     jcenter()
+    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
-    compile 'net.dv8tion:JDA:4.1.1_105'
+    implementation 'net.dv8tion:JDA:4.1.1_105'
+//    implementation 'com.github.lrose07:JDA:development-SNAPSHOT'
 
     testImplementation('org.junit.jupiter:junit-jupiter-api:5.4.2')
     testRuntime('org.junit.jupiter:junit-jupiter-engine:5.4.2')
