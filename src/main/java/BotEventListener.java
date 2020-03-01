@@ -32,6 +32,9 @@ public class BotEventListener extends ListenerAdapter {
             case "secret-party":
                 startAParty(guild, event, commands);
                 break;
+            case "party":
+                // do stuff
+                break;
             default:
                 event.getChannel().sendMessage("I'm not sure what you want, but let's party anyway!").queue();
         }

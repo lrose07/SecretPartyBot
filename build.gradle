@@ -1,11 +1,35 @@
 plugins {
     id 'java'
+    id 'application'
 }
 
+defaultTasks 'jar'
+
 group 'com.laurenarose'
-version '1.0-SNAPSHOT'
+version '1.0'
+
+mainClassName = 'SecretPartyBotLauncher'
 
 sourceCompatibility = 1.8
+
+jar {
+    version = '1.0'
+    manifest {
+        attributes(
+                'Main-Class': mainClassName
+        )
+    }
+}
+
+//create a single Jar with all dependencies
+task createBotJar(type: Jar) {
+    manifest {
+        attributes 'Implementation-Title': 'SPB',
+                'Main-Class': mainClassName
+    }
+    from { (configurations.runtime).collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
 
 repositories {
     mavenCentral()
